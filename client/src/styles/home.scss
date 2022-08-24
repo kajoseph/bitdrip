@@ -1,0 +1,24 @@
+@import './lib/position';
+@import './lib/spacing';
+@import './lib/variables';
+
+.slogan {
+  font-size: 3rem;
+  // font-weight: bold;
+  font-family: 'Heebo', serif;
+}
+
+.separator {
+  color: $color-primary;
+}
+
+.spacer {
+  width: 10%;
+}
+
+.get-started {
+  background-color: $color-primary;
+  width: 20rem;
+  height: 5rem;
+  font-size: 2rem;
+}

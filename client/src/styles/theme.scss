@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&family=Ubuntu:ital,wght@1,300;1,700&display=swap');
+
+@import 'lib/variables';
+@import 'lib/position';
+@import 'lib/spacing';
+
+html {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+  font-family: $font-main;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  // background: red;
+  // color: $color-text-white;
+  // background: blue;
+  // font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  //   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  //   sans-serif;
+  // font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 1.4rem;
+
+  div {
+    display: flex;
+  }
+}
+
+
+.App {
+  text-align: center;
+}
+
+
+.App-Body {
+  // padding-top: $titlebar-height + 30px; // push down past header
+  // padding-left: 1rem;
+  // padding-right: 1rem;
+  // padding-bottom: 30px;
+  overflow: hidden;
+  // min-height: calc(100vh - #{$titlebar-height + 30});// + $tabbar-height + 60px}); // minus padding
+
+  background-color: $color-bg;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  flex-grow: 1;
+}
+
+
+a {
+  color: $color-gray;
+}
+
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkbox {
+  &:checked {
+    background-color: orange;
+  }
+}

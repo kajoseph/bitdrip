@@ -1,0 +1,61 @@
+@import 'lib/variables';
+@import 'lib/animations';
+
+.btn {
+  border: 1px solid $color-primary;
+  border-radius: 7px;
+  transition: ease-out .2s;
+  overflow: hidden;
+  font-weight: bold;
+  font-family: 'sans-serif';
+  
+  > button {
+    padding-top: .8rem;
+    padding-bottom: .8rem;
+    padding-right: 1.3rem;
+    padding-left: 1.3rem;
+
+    background-color: unset;
+    border: unset;
+    font: unset;
+    cursor: default;
+    text-decoration: unset;
+    width: 100%;
+
+    &:focus {
+      outline: unset;
+      cursor: default;
+    }
+
+    &:hover {
+      cursor: pointer;
+      color: $color-text-white;
+      background-color: $color-primary;
+      transition: ease-in .2s;
+    }
+
+    &:disabled {
+      background-color: $color-light-gray;
+      &:hover {
+        background-color: $color-light-gray;
+      }
+    }
+  }
+
+  &:hover {
+    background-color: $color-primary;
+    transition: ease-in .2s;
+  }
+  &:disabled {
+    background-color: $color-light-gray;
+    &:hover {
+      background-color: $color-light-gray;
+      transition: none;
+    }
+  }
+
+  .pressed {
+    animation: depress .2s;  
+  }
+}
+

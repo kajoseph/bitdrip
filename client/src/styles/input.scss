@@ -1,0 +1,50 @@
+@import 'lib/variables';
+
+
+.input {
+  padding-top: .8rem;
+  padding-bottom: .8rem;
+  padding-right: 1.3rem;
+  padding-left: 1.3rem;
+
+  background-color: $color-secondary;
+  border-radius: 7px;
+  overflow: hidden;
+  flex-direction: column;
+
+  > label {
+    color: $color-gray;
+    text-transform: uppercase;
+    display: flex;
+    margin-bottom: .5rem;
+    font-size: 1.1rem;
+    border-bottom: .5px solid $color-light-gray
+  }
+  input, textarea, select {
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    color: $color-text-gray;
+    resize: none;
+    font-size: inherit;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .show-hide {
+    color: $color-gray !important;
+  }
+
+  &.textarea {
+    resize: both;
+  }
+
+  &.disabled {
+    background-color: transparent;
+    input, textarea {
+      color: $color-text-disabled !important;
+    }
+  }
+}

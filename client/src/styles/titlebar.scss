@@ -1,0 +1,55 @@
+@import 'lib/variables';
+
+#titlebar {
+  position: absolute;
+  width: calc(100% - 20px); // minus 20px b/c of padding
+  overflow: hidden;
+  background-color: $color-nav;
+  display: flex;
+  padding: 10px;
+  font-size: 1.8rem;
+  max-height: $titlebar-height;
+
+  div {
+    display: flex;
+  }
+
+  > .container {
+    flex: 1 1 auto;
+
+    .content-div {
+      flex-direction: column;
+      justify-content: center;
+
+      > * {
+        flex-direction: row;
+      }
+    }
+  }
+
+  .notifications {
+    border: none;
+    border-radius: 50px;
+    
+    &.flash {
+      animation: 10s pulse 2s infinite;
+
+      &:hover {
+        animation: none;
+      }
+    }
+
+    &-ready {
+      animation: 10s jingle 2.2s infinite;
+      &:hover {
+        animation: none;
+      }
+
+    }
+
+    &-none {
+      color: $color-secondary;
+    }
+  }
+}
+

@@ -1,0 +1,28 @@
+@import './lib/variables';
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.error {
+  color: $color-error;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .2s linear, padding-bottom .1s ease-in;
+
+  &.show {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: $padding-x;
+    padding-right: $padding-x;
+    max-height: 30px;
+  }
+}
+
+.scroll {
+  overflow: scroll;
+}

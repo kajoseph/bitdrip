@@ -1,0 +1,49 @@
+@keyframes depress {
+  0% { transform: scale(1) }
+  50% { transform: scale(.8) }
+  100% { transform: scale(1) }
+}
+
+@keyframes jingle {
+  2% { transform: rotate(20deg)}
+  4% { transform: rotate(-20deg)}
+  6% { transform: rotate(20deg)}
+  8% { transform: rotate(-20deg)}
+  10% { transform: rotate(0deg)}
+}
+
+@keyframes pulse {
+  2% { background-color: $color-primary }
+  4% { background-color: inherit }
+  6% { background-color: $color-primary }
+  8% { background-color: inherit }
+  10% { background-color: transparent }
+}
+
+@keyframes pulse-text {
+  0% { color: $color-white; }
+  50% { color: $color-text; }
+  100% { color: $color-white; }
+}
+
+@keyframes down-over {
+  0% { height: 0%; width: 0% }
+  50% { height: auto; width: 0% }
+  100% { width: auto; }
+}
+
+@keyframes down {
+  0% { height: 0% }
+  100% { height: auto }
+}
+
+@keyframes leftToRight {
+  0% { width: 0% }
+  100% { width: auto }
+}
+
+@keyframes spin {
+  0% { width: auto }
+  50% { width: 0%; }
+  100% { width: auto; }
+}
