@@ -1,10 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const https = require('https');
+const http = require('http');
 const fs = require('fs');
 const { api: config } = require('../config');
 
+const useHttps = !!config.key && !!config.cert;
+
 const app = express();
+
 
 // Body parsing
 app.use(express.json());
@@ -19,7 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cors({
-  origin: `https://${config.host}:9000`
+  origin: `http${useHttps ? 's' : ''}://${config.host}:9000`
 }));
 
 // Routing
@@ -31,10 +35,15 @@ app.use('/faucet', require('./routes/faucet'));
 
 
 // Listening
-const server = https.createServer({
-  key: fs.readFileSync(config.key, 'utf8'),
-  cert: fs.readFileSync(config.cert, 'utf8')
-}, app);
+let server;
+if (useHttps) {
+  server = https.createServer({
+    key: fs.readFileSync(config.key, 'utf8'),
+    cert: fs.readFileSync(config.cert, 'utf8')
+  }, app);
+} else {
+  server = http.createServer({}, app);
+}
 server.listen(config.port, config.host, function() {
   console.log('Listening at https://' + config.host + ':' + config.port);
 });

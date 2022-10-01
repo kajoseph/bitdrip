@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+node_modules/bitcore-client/bin/wallet $@

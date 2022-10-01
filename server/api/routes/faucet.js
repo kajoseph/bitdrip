@@ -48,8 +48,14 @@ app.get('/', async function(req, res) {
         c.limit = c.chain === c.code ? CONSTANTS.DEFAULT_FAUCET_LIMITS.EVM : CONSTANTS.DEFAULT_FAUCET_LIMITS.STABLECOIN;
       }
       const chainUtils = CWC.Transactions.get({ chain: c.chain });
-      if (chainUtils && typeof chainUtils.getChainId === 'function') {
+      if (chainUtils && typeof chainUtils.getChainId === 'function' && config.wallets[c.chain]) {
         c.chainId = chainUtils.getChainId(config.wallets[c.chain].network);
+      }
+
+      if (config.wallets[c.chain]) {
+        c.isConfigured = true;
+      } else {
+        c.isConfigured = false;
       }
     }
 

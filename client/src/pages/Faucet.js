@@ -22,15 +22,15 @@ export const Faucet = (props) => {
   const [getParent, setParent] = createSignal(siteState.faucets.find(f => f.code === getFaucet().chain));
   const [amountError, setAmountError] = createSignal('Amount is not valid');
   
-  
-  
   const strippedCode = () => {
     if (getFaucet().code.indexOf('_') > -1) {
       return getFaucet().code.substring(0, getFaucet().code.indexOf('_'));
      }
      return getFaucet().code;
   };
+
   const hasParent = () => getFaucet().chain !== location();
+  const isAvailable = () => getFaucet().isConfigured && (!hasParent() || !!getFaucet().contractAddress);
 
   createEffect(() => {
     const faucet = siteState.faucets.find(f => f.code === location())
@@ -138,72 +138,74 @@ export const Faucet = (props) => {
             </div>
 
 
-            {/* Faucet */}
-            <div class='flex-column marg-y-50'>
-              
-              {/* Address */}
-              <Input class='address' onfocus={clearAddressError} onfocusout={setAddress} placeholder='Enter receiving address'></Input>
-              <div id='address-error' class='error justify-content-start marg-t-5'>Address is not valid</div>
-              
-              {/* Amount */}
-              <div class='flex-row justify-content-center'>
-                <div class='flex-column'>
-                  <div class='flex-row justify-content-center'>
-                    <Input class='amount marg-t-20' onfocus={clearAmountError} onfocusout={setAmount} type='number' placeholder={`Enter amount in ${strippedCode()}`} min='0'></Input>
+            <Show when={isAvailable()} fallback={<div class='flex-column marg-y-50' style='font-size:2rem;'>Sorry! This currency is currently unavailable. Please try again later.</div>}>
+              {/* Faucet */}
+              <div class='flex-column marg-y-50'>
+                
+                {/* Address */}
+                <Input class='address' onfocus={clearAddressError} onfocusout={setAddress} placeholder='Enter receiving address'></Input>
+                <div id='address-error' class='error justify-content-start marg-t-5'>Address is not valid</div>
+                
+                {/* Amount */}
+                <div class='flex-row justify-content-center'>
+                  <div class='flex-column'>
+                    <div class='flex-row justify-content-center'>
+                      <Input class='amount marg-t-20' onfocus={clearAmountError} onfocusout={setAmount} type='number' placeholder={`Enter amount in ${strippedCode()}`} min='0'></Input>
+                    </div>
+                    <div id='amount-error' class='error justify-content-start marg-t-5'>{amountError()}</div>
                   </div>
-                  <div id='amount-error' class='error justify-content-start marg-t-5'>{amountError()}</div>
                 </div>
-              </div>
-              
-              {/* Submit button */}
-              <div class='flex-row justify-content-center'>
-                <Button id='submit' class='marg-y-20' onClick={submitRequest} disabled={submitting()}>Submit</Button>
-              </div>
-              
-              {/* Message center */}
-              <Show when={submitting()}>
+                
+                {/* Submit button */}
                 <div class='flex-row justify-content-center'>
-                  <Icon icon='tower-broadcast'/><div class='pad-x-20 pulse'>Broadcasting</div><Icon icon='tower-broadcast'/>
+                  <Button id='submit' class='marg-y-20' onClick={submitRequest} disabled={submitting()}>Submit</Button>
                 </div>
-              </Show>
-              <Show when={submitMsg()} >
-                <div class='flex-row justify-content-center'>
-                  {submitMsg()}
-                </div>
-              </Show>
-
-            </div>
-
-
-            {/* Metadata */}
-            <div class='flex-grow flex-column'>
-              {/* White space dive to push metadata to bottom of page */}
-              <div class='flex-11a'></div>
-              {/* Metadata div */}
-              <div class='metadata flex-column justify-content-center pad-20'>
-                <div class='title pad-b-20'>Metadata</div>
-
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Max</th>
-                      <th>Min</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{getFaucet().limit.max} {strippedCode()}</td>
-                      <td>{getFaucet().limit.min} {strippedCode()}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <Show when={getFaucet().contractAddress}>
-                  <div class='pad-10'>Contract Address: {getFaucet().contractAddress}</div>
-                  <div class='pad-10'>Chain ID: {getFaucet().chainId}</div>
+                
+                {/* Message center */}
+                <Show when={submitting()}>
+                  <div class='flex-row justify-content-center'>
+                    <Icon icon='tower-broadcast'/><div class='pad-x-20 pulse'>Broadcasting</div><Icon icon='tower-broadcast'/>
+                  </div>
                 </Show>
+                <Show when={submitMsg()} >
+                  <div class='flex-row justify-content-center'>
+                    {submitMsg()}
+                  </div>
+                </Show>
+
               </div>
-            </div>
+
+
+              {/* Metadata */}
+              <div class='flex-grow flex-column'>
+                {/* White space dive to push metadata to bottom of page */}
+                <div class='flex-11a'></div>
+                {/* Metadata div */}
+                <div class='metadata flex-column justify-content-center pad-20'>
+                  <div class='title pad-b-20'>Metadata</div>
+
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Max</th>
+                        <th>Min</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{getFaucet().limit.max} {strippedCode()}</td>
+                        <td>{getFaucet().limit.min} {strippedCode()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <Show when={getFaucet().contractAddress}>
+                    <div class='pad-10'>Contract Address: {getFaucet().contractAddress}</div>
+                    <div class='pad-10'>Chain ID: {getFaucet().chainId}</div>
+                  </Show>
+                </div>
+              </div>
+            </Show>
 
 
           </div>  

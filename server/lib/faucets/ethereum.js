@@ -10,12 +10,14 @@ class EthereumFaucet {
     this.chain = 'ETH';
     this.config = config.wallets[this.chain];
     this.contracts = config.contracts[this.chain];
-    this.web3 = new Web3(this.config.provider);
+    this.web3 = null;
     this.wallet = null;
     this.started = false;
   }
 
   async start() {
+    this.web3 = new Web3(this.config.provider);
+
     this.wallet = await Wallet.loadWallet({ name: this.config.name });
     // Ensure password is correct
     await this.wallet.unlock(this.config.walletPassword);

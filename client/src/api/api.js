@@ -1,6 +1,7 @@
 import { tryParseJSON } from '../lib/utils';
 
-const baseUrl = 'https://kjoseph.bp:3003';
+const getHostName = () => window.location.host.split(':').length == 2 ? window.location.host.split(':')[0] + ':3003' : window.location.host;
+const baseUrl = `${window.location.protocol}//${getHostName()}`;
 const getUrl = (part) => baseUrl + part;
 
 const wrapFetch = (url, opts) => new Promise((resolve, reject) => {

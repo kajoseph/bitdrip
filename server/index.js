@@ -18,13 +18,18 @@ const faucets = require('./lib/faucets');
 
 process.on('uncaughtException', (err) => {
   console.error('An uncaught exception occurred!!', err);
+  process.emit('SIGINT');
 });
 
-// process.on('unhandledRejection', (err) => {
-//   console.error('An uncaught rejection occurred!!', err);
-// });
+process.on('unhandledRejection', (err) => {
+  console.error('An uncaught rejection occurred!!', err);
+  process.emit('SIGINT');
+});
 
 process.on('SIGINT', () => {
   db.shutdown();
-  process.exit(0);
+  setTimeout(() => {
+    console.log('Force shutting down. Check that you are closing all connections on SIGINT');
+    process.exit(0);
+  }, 5000).unref();
 });
