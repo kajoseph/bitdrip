@@ -37,6 +37,7 @@
     &:disabled {
       background-color: $color-light-gray;
       &:hover {
+        color: $color-gray;
         background-color: $color-light-gray;
       }
     }

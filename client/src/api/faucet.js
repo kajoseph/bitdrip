@@ -1,7 +1,7 @@
 import api from './api'
 
 export const fetchFaucets = () => api.GET('/faucet');
-export const pourFaucet = ({ address, amount, chain, ticker }) => api.POST('/faucet', { body: { address, amount, chain, ticker } });
+export const pourFaucet = ({ address, amount, chain, ticker, captchaToken }) => api.POST('/faucet', { headers: { 'x-captcha': captchaToken }, body: { address, amount, chain, ticker } });
 
 /*
 api.GET('https://test.bitpay.com/currencies')

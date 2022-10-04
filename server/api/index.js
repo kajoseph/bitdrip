@@ -31,6 +31,7 @@ app.use(cors({
 //   user: [{ methods: ['POST'], url: '/user/login' }, { methods: ['POST'], url: '/user/register' }],
 //   funding: []
 // };
+app.use('/site', require('./routes/site'));
 app.use('/faucet', require('./routes/faucet'));
 
 

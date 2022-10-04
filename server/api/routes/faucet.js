@@ -6,6 +6,7 @@ const utils = require('../../lib/utils');
 const faucets = require('../../lib/faucets');
 const config = require('../../config');
 const CONSTANTS = require('../../lib/constants');
+const captcha = require('../middleware/captcha');
 
 const app = express();
 
@@ -68,7 +69,7 @@ app.get('/', async function(req, res) {
   }
 });
 
-app.post('/', async function(req, res) {
+app.post('/', captcha, async function(req, res) {
   try {
     const { address, amount, ticker } = req.body;
     const coin = ticker.split('_')[0];
@@ -102,7 +103,7 @@ app.post('/', async function(req, res) {
     return res.send({ data: { amount: amount, txid } });
   } catch (err) {
     res.statusCode = 500;
-    return res.send({ err: 'unable to get addresses' });
+    return res.send({ err: 'Unable to get addresses' });
   }
 });
 

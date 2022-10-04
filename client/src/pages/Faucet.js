@@ -1,5 +1,6 @@
-import { createEffect, createRenderEffect, createSignal, Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
 import * as CWC from 'crypto-wallet-core';
+import HCaptcha from 'solid-hcaptcha';
 import { useRouterContext } from '../contexts/router';
 import { useSiteContext } from '../contexts/site';
 import { Input } from '../components/Input';
@@ -21,6 +22,7 @@ export const Faucet = (props) => {
   const [getFaucet, setFaucet] = createSignal(siteState.faucets.find(f => f.code === location()));
   const [getParent, setParent] = createSignal(siteState.faucets.find(f => f.code === getFaucet().chain));
   const [amountError, setAmountError] = createSignal('Amount is not valid');
+  const [getHcaptchaToken, setHcaptchaToken] = createSignal(null);
   
   const strippedCode = () => {
     if (getFaucet().code.indexOf('_') > -1) {
@@ -52,10 +54,21 @@ export const Faucet = (props) => {
       hasError = true;
     }
 
+    if (!getHcaptchaToken()) {
+      setSubmitMsg('Missing captcha');
+      hasError = true;
+    }
+
     if (!hasError) {
       console.log('submitted', address(), amount());
       setSubmitting(true);
-      api.pourFaucet({ address: address(), amount: amount(), chain: getFaucet().chain, ticker: getFaucet().code })
+      api.pourFaucet({
+        address: address(),
+        amount: amount(),
+        chain: getFaucet().chain,
+        ticker: getFaucet().code,
+        captchaToken: getHcaptchaToken()
+      })
         .catch(err => {
           if (err.status === 400) {
             setSubmitMsg(utils.tryParseJSON(err.data).msg || err.data);
@@ -156,9 +169,19 @@ export const Faucet = (props) => {
                   </div>
                 </div>
                 
+                {/* Captcha */}
+                <div class='flex-row justify-content-center'>
+                  {console.log(siteState)}
+                  <HCaptcha
+                    sitekey={siteState.siteData.captchaSiteKey}
+                    onVerify={token => setHcaptchaToken(token)}
+                    onExpire={() => setHcaptchaToken(null)}
+                  />
+                </div>
+
                 {/* Submit button */}
                 <div class='flex-row justify-content-center'>
-                  <Button id='submit' class='marg-y-20' onClick={submitRequest} disabled={submitting()}>Submit</Button>
+                  <Button id='submit' class='marg-y-20' onClick={submitRequest} disabled={submitting() || !getHcaptchaToken()}>Submit</Button>
                 </div>
                 
                 {/* Message center */}

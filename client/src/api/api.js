@@ -1,6 +1,6 @@
 import { tryParseJSON } from '../lib/utils';
 
-const getHostName = () => window.location.host.split(':').length == 2 ? window.location.host.split(':')[0] + ':3003' : window.location.host;
+const getHostName = () => window.location.host.indexOf(':') === -1 ? window.location.host : window.location.host.split(':')[0] + ':3003';
 const baseUrl = `${window.location.protocol}//${getHostName()}`;
 const getUrl = (part) => baseUrl + part;
 
