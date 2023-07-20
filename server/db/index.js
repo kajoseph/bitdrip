@@ -31,13 +31,15 @@ async function init() {
 };
 
 async function shutdown() {
-  console.log('Shutting down database...');
-  console.log(`Closing ${mongoose.connections.length} connection${mongoose.connections.length === 1 ? '' : 's'}...`);
+  console.log(`Closing ${mongoose.connections.length} DB connection${mongoose.connections.length === 1 ? '' : 's'}...`);
   for (let c of mongoose.connections) {
-    c.close(function(e) {
-      if (e) { console.error(e); };
-    });
+    try {
+      await c.close();
+    } catch (e) {
+      console.log(e);
+    }
   }
+  console.log('...all DB connections closed.');
 };
 
 module.exports = {

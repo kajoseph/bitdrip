@@ -36,6 +36,8 @@ class BitcoinFaucet {
     this.started = true;
   }
 
+  stop() {}
+
   async sendTransaction(address, amount) {
     try {
       const amountSats = amount * 1e8;

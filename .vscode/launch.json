@@ -12,7 +12,8 @@
         "<node_internals>/**"
       ],
       "type": "node",
-      "cwd": "${workspaceFolder}/server"
+      "cwd": "${workspaceFolder}/server",
+      "console": "integratedTerminal"
     },
     {
       "name": "Server Integration Tests",

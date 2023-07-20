@@ -9,7 +9,6 @@ const useHttps = !!config.key && !!config.cert;
 
 const app = express();
 
-
 // Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,7 +33,6 @@ app.use(cors({
 app.use('/site', require('./routes/site'));
 app.use('/faucet', require('./routes/faucet'));
 
-
 // Listening
 let server;
 if (useHttps) {
@@ -45,6 +43,20 @@ if (useHttps) {
 } else {
   server = http.createServer({}, app);
 }
+
 server.listen(config.port, config.host, function() {
   console.log('Listening at https://' + config.host + ':' + config.port);
 });
+
+async function stop() {
+  console.log('Closing API...');
+  return new Promise(resolve => server.close(function(err) {
+    // err is given if there was no open server (which we don't really care about);
+    console.log('...API closed.');
+    resolve();
+  }));
+};
+
+module.exports = {
+  stop
+};

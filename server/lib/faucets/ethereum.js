@@ -37,6 +37,13 @@ class EthereumFaucet {
     this.started = true;
   }
 
+  stop() {
+    if (this.web3?.currentProvider?.connected) {
+      console.log(`Disconnecting ${this.chain} web3...`);
+      this.web3.currentProvider.disconnect();
+    }
+  }
+
   async sendTransaction(address, amount, token) {
     try {
       if (!token || token === this.chain) {

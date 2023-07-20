@@ -28,8 +28,8 @@ export const Input = (props) => {
         <div class='flex-row'>
           <input
             type={showPassword() ? 'text' : type}
-            placeholder={props.placeholder}
-            value={props.value}
+            placeholder={props.placeholder || ''}
+            value={props.value || ''}
             autofocus={autofocus}
             onfocusout={props.onfocusout}
             onfocus={props.onfocus}
