@@ -69,16 +69,16 @@ export const Faucet = (props) => {
         ticker: getFaucet().code,
         captchaToken: getHcaptchaToken()
       })
+        .then(({ data: result }) => {
+          console.log(result);
+          setSubmitMsg('Transaction ID: ' + result.txid); // TODO
+        })
         .catch(err => {
           if (err.status === 400) {
             setSubmitMsg(utils.tryParseJSON(err.data).msg || err.data);
           } else {
             setSubmitMsg('An unexpected error occurred');
           }
-        })
-        .then(({ data: result }) => {
-          console.log(result);
-          setSubmitMsg('Transaction ID: ' + result.txid); // TODO
         })
         .finally(() => setSubmitting(false));
     }
@@ -201,7 +201,7 @@ export const Faucet = (props) => {
 
               {/* Metadata */}
               <div class='flex-grow flex-column'>
-                {/* White space dive to push metadata to bottom of page */}
+                {/* White space div to push metadata to bottom of page */}
                 <div class='flex-11a'></div>
                 {/* Metadata div */}
                 <div class='metadata flex-column justify-content-center pad-20'>
