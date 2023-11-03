@@ -1,7 +1,7 @@
 {
-  "name": "bitsmart-server",
+  "name": "bitdrip-server",
   "version": "0.0.1",
-  "description": "Server-side code for BitSmart",
+  "description": "Server-side code for BitDrip",
   "main": "index.js",
   "engines": {
     "node": "^18"
@@ -20,21 +20,21 @@
   "author": "Kenny Joseph",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.4.0",
-    "bitcore-client": "^10.0.5",
+    "axios": "^1.6.0",
+    "bitcore-client": "^10.0.17",
     "cors": "^2.8.5",
-    "cron": "^2.3.1",
-    "crypto-rpc": "git+ssh://git@github.com/bitpay/crypto-rpc.git#e8106ed18740b0257a90365e830726cd66e912f6",
+    "cron": "^3.1.6",
+    "crypto-rpc": "git+ssh://git@github.com/bitpay/crypto-rpc.git#95bd5a3d375eed7642c5343f8a78fce164ac19f1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.1",
+    "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
-    "mongoose": "^7.4.0"
+    "mongoose": "^8.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.7",
-    "eslint": "^8.45.0",
+    "chai": "^4.3.10",
+    "eslint": "^8.52.0",
     "mocha": "^10.2.0",
-    "sinon": "^15.2.0"
+    "sinon": "^17.0.1"
   }
 }

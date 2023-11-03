@@ -1,7 +1,7 @@
 {
-  "name": "bitsmart-client",
+  "name": "bitdrip-client",
   "version": "0.0.1",
-  "description": "Client-side app for BitSmart",
+  "description": "Client-side app for BitDrip",
   "main": "index.js",
   "engines": {
     "node": "^18"
