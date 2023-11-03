@@ -18,16 +18,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.4.0",
+    "@fortawesome/fontawesome-free": "^6.4.2",
     "crypto-browserify": "^3.12.0",
-    "crypto-wallet-core": "^10.0.5",
+    "crypto-wallet-core": "^10.0.17",
     "https-browserify": "^1.0.0",
     "moment": "^2.29.4",
     "os-browserify": "^0.3.0",
-    "solid-hcaptcha": "^0.2.6",
-    "solid-js": "^1.7.8",
+    "solid-hcaptcha": "^0.4.0",
+    "solid-js": "^1.8.5",
     "stream-browserify": "^3.0.0",
-    "url": "^0.11.1"
+    "url": "^0.11.3"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
