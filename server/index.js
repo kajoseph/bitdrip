@@ -7,12 +7,15 @@ let api;
 (async function() {
   await db.init();
 
-  for (const [currency, currConf] of Object.entries(config.wallets)) {
-    if (currConf.disabled) {
+  for (const [chain, chainConf] of Object.entries(config.wallets)) {
+    if (chainConf.disabled) {
       continue;
     }
-    await faucets[currency].start();
+    console.log('Starting faucet:', chain);
+    await faucets[chain].start();
   }
+  console.log('Faucets successfully started.');
+  console.log('Starting API...');
   api = require('./api');
 })();
 
@@ -34,8 +37,12 @@ process.on('SIGINT', async () => {
   }, 10000).unref();
 
   try {
-    await api.stop();
-    for (const faucet of Object.values(faucets)) {
+    if (api) {
+      console.log('Stopping API...');
+      await api.stop();
+    }
+    for (const [chain, faucet] of Object.entries(faucets)) {
+      console.log('Stopping faucet:', chain);
       await faucet.stop();
     }
     db.shutdown();

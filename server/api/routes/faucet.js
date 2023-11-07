@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const { CryptoWalletCore: CWC } = require('bitcore-client');
 const db = require('../../db');
 const utils = require('../../lib/utils');
@@ -7,25 +6,25 @@ const faucets = require('../../lib/faucets');
 const config = require('../../config');
 const CONSTANTS = require('../../lib/constants');
 const captcha = require('../middleware/captcha');
+const resources = require('../../lib/resources');
 
 const app = express();
 
 
 app.get('/', async function(req, res) {
   try {
-    let currencies = await axios.get('https://test.bitpay.com/currencies');
-    if (currencies.status !== 200) {
+    let currencies = await resources.getCurrencies();
+    if (!currencies) {
       return res.status(418).send({ err: 'test.bitpay currencies were unavailable' });
     }
+    currencies = currencies.filter(f => !!f.chain && f.code !== 'XRP');
 
-    let selectableWallets = await axios.get('https://test.bitpay.com/invoiceData/selectableWallets?returnObject=true');
-    if (selectableWallets.status !== 200) {
+    const selectableWallets = await resources.getSelectableWallets();
+    if (!selectableWallets) {
       return res.status(418).send({ err: 'test.bitpay selectable wallets were unavailable' });
     }
-    selectableWallets = selectableWallets.data.data;
 
-    currencies = currencies.data.data.filter(f => !!f.chain && f.code !== 'XRP');
-    for (let c of currencies) {
+    for (const c of currencies) {
       const wallet = Object.values(selectableWallets).find(wallet => wallet.currencies[c.code]);
       if (!wallet) {
         continue;
@@ -39,9 +38,6 @@ app.get('/', async function(req, res) {
       if (c.code.indexOf('_') > -1) {
         strippedCode = c.code.substring(0, c.code.indexOf('_'));
         c.image = c.image.replace(c.code, strippedCode);
-      }
-      if (config.contracts[c.chain] && config.contracts[c.chain][strippedCode]) {
-        c.contractAddress = config.contracts[c.chain][strippedCode];
       }
       c.limit = CONSTANTS.FAUCET_LIMITS[strippedCode];
       if (!c.limit) {
@@ -64,6 +60,7 @@ app.get('/', async function(req, res) {
 
     return res.send({ data: currencies });
   } catch (err) {
+    console.warn(err);
     res.statusCode = 500;
     return res.send({ err: 'an unexpected error ocurred' });
   }
@@ -102,6 +99,7 @@ app.post('/', captcha, async function(req, res) {
 
     return res.send({ data: { amount: amount, txid } });
   } catch (err) {
+    console.warn(err);
     res.statusCode = 500;
     return res.send({ err: 'Unable to get addresses' });
   }

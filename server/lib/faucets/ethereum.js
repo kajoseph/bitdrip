@@ -1,15 +1,15 @@
 const { Wallet, CryptoWalletCore: CWC } = require('bitcore-client');
-const config = require('../../config');
 const Invoice = require('../../contracts/ETH/Invoice.json');
 const ERC20 = require('../../contracts/ETH/GUSD.json'); // GUSD is used here b/c it has the decimals property. The ERC20 contract doesn't have decimals on it.
+const BaseFaucet = require('./baseFaucet');
+const { getCurrencies } = require('../resources');
 
 const Web3 = CWC.Web3;
 
-class EthereumFaucet {
-  constructor() {
-    this.chain = 'ETH';
-    this.config = config.wallets[this.chain];
-    this.contracts = config.contracts[this.chain];
+class EthereumFaucet extends BaseFaucet {
+  constructor({ chain = 'ETH' } = {}) {
+    super({ chain });
+    this.contracts = {};
     this.web3 = null;
     this.wallet = null;
     this.started = false;
@@ -18,21 +18,25 @@ class EthereumFaucet {
   async start() {
     this.web3 = new Web3(this.config.provider);
 
-    this.wallet = await Wallet.loadWallet({ name: this.config.name });
+    this.wallet = await Wallet.loadWallet({ name: this.config.name, storageType: this.config.storageType });
     // Ensure password is correct
     await this.wallet.unlock(this.config.walletPassword);
     this.wallet.lock();
 
-    // Add any new tokens to the wallet
-    for (let [token, address] of Object.entries(config.contracts[this.chain])) {
-      if (token === 'invoice') { continue; }
+    let currencies = await getCurrencies();
+    for (const conf of currencies.filter(c => c.chain === this.chain && !!c.contractAddress)) {
+      const ticker = conf.code.split('_')[0];
+      this.contracts[ticker] = conf.contractAddress;
 
-      const walletToken = this.wallet.tokens.find(t => t.symbol == token);
-      if (!walletToken || walletToken.address !== address) {
-        const decimals = await this.getErc20Decimals(address);
-        await this.wallet.addToken({ symbol: token, address, decimals });
+      // Add any new tokens to the wallet
+      const walletToken = this.wallet.tokens.find(t => t.symbol == ticker);
+      if (!walletToken || walletToken.address !== conf.contractAddress) {
+        const decimals = await this.getErc20Decimals(conf.contractAddress);
+        await this.wallet.addToken({ symbol: ticker, address: conf.contractAddress, decimals });
       }
     }
+
+    this.contracts.invoice = this.config.invoiceContract;
 
     this.started = true;
   }
@@ -58,10 +62,10 @@ class EthereumFaucet {
 
       if (balance.confirmed < amount + 1e5) { // 1e5 is a generous estimate of a fee
         // Ideally we would distribute all of our token holdings before going to the contract so that contract funds are available for ops.
-        const { txid } = await this._sweepFromInvoice(token);
-        if (txid) {
-          // TODO record sweep
-        }
+        // const { txid } = await this._sweepFromInvoice(token);
+        // if (txid) {
+        //   // TODO record sweep
+        // }
         return { err: 'Faucet is dry. Please try again later' };
       }
 
@@ -158,6 +162,9 @@ class EthereumFaucet {
   async getFeeRate() {
     let fee = await this.wallet.getNetworkFee();
     fee = JSON.parse(fee).feerate;
+    if (!fee) {
+      fee = await this.web3.eth.getGasPrice();
+    }
     return fee;
   }
 
@@ -182,3 +189,4 @@ class EthereumFaucet {
 }
 
 module.exports = new EthereumFaucet();
+module.exports.EthereumFaucetClass = EthereumFaucet;
