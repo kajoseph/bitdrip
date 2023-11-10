@@ -11,9 +11,7 @@ async function init() {
     const connection = await mongoose.connect(`mongodb://${database.connect}`, {
       dbName: process.env.BITDRIP_DB_NAME || database.name || 'bitdrip',
       user: process.env.BITDRIP_DB_USER || database.user,
-      pass: process.env.BITDRIP_DB_PASS || database.password,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      pass: process.env.BITDRIP_DB_PASS || database.password
     });
 
     console.log('database connected!');
