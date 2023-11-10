@@ -8,7 +8,7 @@ const { database } = require('../config');
 
 async function init() {
   try {
-    const connection = await mongoose.connect(`mongodb://${database.connect}`, {
+    const connection = await mongoose.connect(`mongodb://${process.env.BITDRIP_DB_HOST || database.connect}`, {
       dbName: process.env.BITDRIP_DB_NAME || database.name || 'bitdrip',
       user: process.env.BITDRIP_DB_USER || database.user,
       pass: process.env.BITDRIP_DB_PASS || database.password
